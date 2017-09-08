@@ -6,10 +6,18 @@ var answerSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
   },
-  vote: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
-  }]
-}, { timestamps: true })
+  vote: {
+    up: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user'
+    }],
+    down: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user'
+    }]
+  }
+}, {
+  timestamps: true
+})
 
 module.exports = answerSchema
