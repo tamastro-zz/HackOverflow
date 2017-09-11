@@ -46,13 +46,11 @@
         </div>
 
         <div class="navbar-end">
-          <a class="navbar-item is-hidden-desktop-only" href="https://github.com/jgthms/bulma" target="_blank">
-          <span class="icon" style="color: #333;">
-            <i class="fa fa-user-circle"></i>
-          </span>
+          <a class="navbar-item is-hidden-desktop-only">
+            <img width=30 :src="`data:image/png;base64,${identicon}`">
         </a>
         <div class="navbar-item">
-          Username
+          {{getusername}}
         </div>
           <div class="navbar-item">
             <div class="field is-grouped">
@@ -77,10 +75,20 @@
 </template>
 
 <script>
+import jwtdecode from 'jwt-decode'
+import Identicon from 'identicon.js'
   export default {
-    name: 'app'
+    name: 'app',
+    computed: {
+      getusername() {
+        return this.$store.getters.getusername.username
+      },
+      identicon() {
+        var avatar = new Identicon(this.$store.getters.getusername.id, 420).toString();
+        return avatar
+      }
+    }
   }
-
 </script>
 
 <style>
@@ -90,6 +98,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    background-color: grey cover;
   }
 
 </style>

@@ -22,7 +22,7 @@ exports.getquestion = (req, res) => {
   question.findOne({
       _id: req.params.id
     })
-    // .populate('author answer.user vote.up vote.down answer.vote.up answer.vote.down')
+    .populate('author answer.user vote.up vote.down answer.vote.up answer.vote.down')
     // .populate({ path: 'answer.user'})
     .then(data => {
       res.send(data)

@@ -1,5 +1,6 @@
 <template>
   <div class="hello container">
+    <br><br>
     <a class="button is-large is-info" @click="openmodal">
     <span>Add Question</span>
     <span class="icon is-medium">
@@ -8,29 +9,26 @@
   </a>
     <br>
     <br>
-    <div class="card" v-for="thread in threads" :key="thread._id">
-      <adddiv class="card-content">
+    <div  v-for="thread in threads" :key="thread._id">
+    <div class="card">
+      <div class="card-content">
         <p class="title">
           “{{thread.title}}”
         </p>
         <p class="subtitle">
           Created By: {{thread.author.username}}
         </p>
-      </adddiv>
+      </div>
       <footer class="card-footer">
         <p class="card-footer-item">
           <span>
               Answers: {{thread.answer.length}}
         </span>
         </p>
-
-        <p class="card-footer-item">
-          <span>
-               Views:
-            </span>
-        </p>
-
+          <button class="button is-white card-footer-item"   @click="openthread(thread._id)">Open Thread</button>
       </footer>
+    </div>
+    <br>
     </div>
 
 
@@ -59,7 +57,7 @@
 
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success" @click="postquestion">Post</button>
+          <button class="button is-success" @click="paket">Post</button>
           <button class="button" @click="closemodal">Cancel</button>
         </footer>
       </div>
@@ -78,7 +76,7 @@
         threads: [],
         modalclass: 'modal',
         title: '',
-        text: ''
+        text: '',
       }
     },
     methods: {
@@ -114,6 +112,13 @@
         this.title = ''
         this.text = ''
         this.closemodal()
+      },
+      paket() {
+        this.postquestion(),
+        this.getthread()
+      },
+      openthread(id) {
+        this.$router.push({ path: `/thread/${id}` })
       }
     },
     created() {
