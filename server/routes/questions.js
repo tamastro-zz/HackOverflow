@@ -20,8 +20,6 @@ router.post('/:id/:ida/down', controller.voteanswerdown);
 
 router.post('/:id/:ida/up', controller.voteanswerup);
 
-router.get('/:id/:ida/', controller.test);
-
 router.patch('/:id', controller.editquestion);
 
 router.delete('/:id', controller.deletequestion);

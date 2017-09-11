@@ -390,16 +390,3 @@ exports.voteanswerup = (req, res) => {
       }
     })
 }
-
-exports.test = (req, res) => {
-  var token = req.headers.token
-  var decode = jwt.verify(token, process.env.SECRET)
-  question.aggregate([
-    {$match: {_id: req.params.id}},
-    {$match: {'answer._id': req.params.ida}},
-    {$match: {'answer.vote.down': decode.id}}
-  ])
-  .then(data => {
-    res.send(data)
-  })
-}

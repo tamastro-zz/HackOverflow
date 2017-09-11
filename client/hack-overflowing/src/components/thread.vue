@@ -1,66 +1,65 @@
 <template>
   <div class="hello container is-fluid">
-
-    <article class="media">
-      <figure class="media-left">
-        <p class="image is-64x64">
-          <img :src="`data:image/png;base64,${identicon(thread.author._id)}`">
-        </p>
-      </figure>
-      <div class="media-content">
-        <div class="content">
-          <p>
-            <strong>{{thread.author.username}}</strong>
-            <br> {{thread.text}}
-            <br>
-            <small>
-            <a><i class="fa fa-arrow-circle-up"></i></a> · {{votes}}pts ·
-            <a><i class="fa fa-arrow-circle-down"></i></a> · {{thread.createdAt}}</small>
+    
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img :src="`data:image/png;base64,${identicon(thread.author._id)}`">
           </p>
-        </div>
-
-        <article class="media" v-for="ans in thread.answer" :key="ans._id">
-          <figure class="media-left">
-            <p class="image is-48x48">
-              <img src="http://bulma.io/images/placeholders/96x96.png">
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>{{thread.author.username}}</strong>
+              <br> {{thread.text}}
+              <br>
+              <small>
+            <a @click="upquestion"><i class="fa fa-arrow-circle-up"></i></a> · {{votes}}pts ·
+            <a @click="downquestion"><i class="fa fa-arrow-circle-down"></i></a> · {{thread.createdAt}}  -  <a><i class="fa fa-pencil"></i></a></small>
             </p>
-          </figure>
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>{{ans.user.username}}</strong>
-                <br> {{ans.text}}
-                <br>
-                <small>
-            <a><i class="fa fa-arrow-circle-up"></i></a> · {{answersvotes(ans.vote.up.length, ans.vote.down.length)}}pts ·
-            <a><i class="fa fa-arrow-circle-down"></i></a> · {{ans.createdAt}}</small>
-              </p>
-            </div>
           </div>
-        </article>
 
-      </div>
-    </article>
-    <article class="media">
-      <figure class="media-left">
-        <p class="image is-64x64">
-          <img :src="`data:image/png;base64,${myidenticon}`">
-        </p>
-      </figure>
-      <div class="media-content">
-        <div class="field">
-          <p class="control">
-            <textarea class="textarea" placeholder="Add a answer..." v-model="answertext"></textarea>
-          </p>
-        </div>
-        <div class="field">
-          <p class="control">
-            <button class="button" @click="postanswer">Post answer</button>
-          </p>
-        </div>
-      </div>
-    </article>
+          <article class="media" v-for="ans in thread.answer" :key="ans._id">
+            <figure class="media-left">
+              <p class="image is-48x48">
+                <img :src="`data:image/png;base64,${identicon(ans.user._id)}`">
+              </p>
+            </figure>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong>{{ans.user.username}}</strong>
+                  <br> {{ans.text}}
+                  <br>
+                  <small>
+            <a @click="upanswer(ans._id)"><i class="fa fa-arrow-circle-up"></i></a> · {{answersvotes(ans.vote.up.length, ans.vote.down.length)}}pts ·
+            <a @click="downanswer(ans._id)"><i class="fa fa-arrow-circle-down"></i></a> · {{ans.createdAt}}</small>
+                </p>
+              </div>
+            </div>
+          </article>
 
+        </div>
+      </article>
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img :src="`data:image/png;base64,${myidenticon}`">
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="field">
+            <p class="control">
+              <textarea class="textarea" placeholder="Add a answer..." v-model="answertext"></textarea>
+            </p>
+          </div>
+          <div class="field">
+            <p class="control">
+              <button class="button" @click="postanswer">Post answer</button>
+            </p>
+          </div>
+        </div>
+      </article>
   </div>
 </template>
 
@@ -73,7 +72,7 @@
       return {
         thread: {
           author: {
-            _id: '59b2b1300d7d0b335fc3c44a',
+            _id: '59b2b1300d7d0b335fc3c44a123123213',
             username: ''
           },
           vote: {
@@ -86,6 +85,7 @@
               down: []
             },
             user: {
+              _id: '59b2b1300d7d0b335fc3c4123123123124a',
               username: ''
             }
           }],
@@ -117,21 +117,66 @@
         var avatar = new Identicon(id, 420).toString();
         return avatar
       },
-      myidenticon() {
-        var avatar = new Identicon(this.$store.getters.getusername.id, 420).toString();
-        return avatar
-      },
       postanswer() {
         this.$http.post(`/question/${this.id}`, {
-          atext: this.answertext
-        }, {
-          headers: {
-            token: window.localStorage.getItem('token')
-          }
-        })
-        .then(data => {
-          this.getthread()
-        })
+            atext: this.answertext
+          }, {
+            headers: {
+              token: window.localStorage.getItem('token')
+            }
+          })
+          .then(data => {
+            this.answertext = ''
+            this.getthread()
+          })
+      },
+      upquestion() {
+        this.$http.post(`/question/${this.id}/up`, {
+            text: ''
+          }, {
+            headers: {
+              token: window.localStorage.getItem('token')
+            }
+          })
+          .then(data => {
+            this.getthread()
+          })
+      },
+      downquestion() {
+        this.$http.post(`/question/${this.id}/down`, {
+            text: ''
+          }, {
+            headers: {
+              token: window.localStorage.getItem('token')
+            }
+          })
+          .then(data => {
+            this.getthread()
+          })
+      },
+      upanswer(ida) {
+        this.$http.post(`/question/${this.id}/${ida}/up`, {
+            text: ''
+          }, {
+            headers: {
+              token: window.localStorage.getItem('token')
+            }
+          })
+          .then(data => {
+            this.getthread()
+          })
+      },
+      downanswer(ida) {
+        this.$http.post(`/question/${this.id}/${ida}/down`, {
+            text: ''
+          }, {
+            headers: {
+              token: window.localStorage.getItem('token')
+            }
+          })
+          .then(data => {
+            this.getthread()
+          })
       }
     },
     created() {
@@ -150,7 +195,11 @@
         } else {
           return total
         }
-      }
+      },
+      myidenticon() {
+        var avatar = new Identicon(this.$store.getters.getusername.id, 420).toString();
+        return avatar
+      },
     }
   }
 

@@ -2,20 +2,8 @@
   <div id="app">
     <nav class="navbar is-transparent" id="head">
       <div class="navbar-brand">
-        <a class="navbar-item" href="http://bulma.io">
+        <a class="navbar-item">
         <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
-      </a>
-
-        <a class="navbar-item is-hidden-desktop" href="https://github.com/jgthms/bulma" target="_blank">
-        <span class="icon" style="color: #333;">
-          <i class="fa fa-github"></i>
-        </span>
-      </a>
-
-        <a class="navbar-item is-hidden-desktop" href="https://twitter.com/jgthms" target="_blank">
-        <span class="icon" style="color: #55acee;">
-          <i class="fa fa-twitter"></i>
-        </span>
       </a>
 
         <div class="navbar-burger burger" data-target="navMenuTransparentExample">
@@ -25,7 +13,7 @@
         </div>
       </div>
 
-      <div id="navMenuTransparentExample" class="navbar-menu">
+      <div id="navMenuTransparentExample" class="navbar-menu" v-if="this.$store.state.header == true">
         <div class="navbar-start">
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link  is-active" href="/documentation/overview/start/">
@@ -45,7 +33,7 @@
           </div>
         </div>
 
-        <div class="navbar-end">
+        <div class="navbar-end" v-if="this.$store.state.header == true">
           <a class="navbar-item is-hidden-desktop-only">
             <img width=30 :src="`data:image/png;base64,${identicon}`">
         </a>
