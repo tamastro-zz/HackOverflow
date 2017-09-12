@@ -48,7 +48,7 @@
                 <span class="icon">
                   <i class="fa fa-sign-out"></i>
                 </span>
-                <span>Log Out</span>
+                <span @click="logout">Log Out</span>
               </a>
               </p>
             </div>
@@ -74,6 +74,10 @@ import Identicon from 'identicon.js'
       identicon() {
         var avatar = new Identicon(this.$store.getters.getusername.id, 420).toString();
         return avatar
+      },
+      logout() {
+        this.$router.push({path: '/'})
+        window.localStorage.clear()
       }
     }
   }

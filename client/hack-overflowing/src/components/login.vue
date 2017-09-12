@@ -48,7 +48,7 @@
 
       <div class="field">
         <p class="control has-icons-left">
-          <input class="input" type="password" placeholder="Email" v-model="email">
+          <input class="input" type="text" placeholder="Email" v-model="email">
           <span class="icon is-small is-left">
         <i class="fa fa-envelope"></i>
       </span>
@@ -57,7 +57,7 @@
 
       <div class="field">
         <p class="control has-icons-left">
-          <input class="input" type="password" placeholder="Fullname" v-model="fullname">
+          <input class="input" type="text" placeholder="Fullname" v-model="fullname">
           <span class="icon is-small is-left">
         <i class="fa fa-user-circle-o"></i>
       </span>
