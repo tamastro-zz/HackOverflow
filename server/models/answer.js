@@ -20,4 +20,6 @@ var answerSchema = mongoose.Schema({
   timestamps: true
 })
 
-module.exports = answerSchema
+var answerModel = mongoose.model('answer', answerSchema);
+
+module.exports = answerModel

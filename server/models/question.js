@@ -1,5 +1,4 @@
 'use strict'
-var answerschema = require('./answer')
 var mongoose = require('mongoose')
 
 var questionSchema = mongoose.Schema({
@@ -9,7 +8,10 @@ var questionSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
   },
-  answer: [answerschema],
+  answer: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'answer'
+  }],
   vote: {
     up: [{
       type: mongoose.Schema.Types.ObjectId,

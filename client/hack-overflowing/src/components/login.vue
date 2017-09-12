@@ -86,19 +86,21 @@
     },
     methods: {
       login() {
+        console.log('login');
         this.$http.post('/users/signin', {
             username: this.username,
             password: this.password
           })
           .then(response => {
+            console.log('responnya');
+            if (response.data == 'nousername') {
+              this.error = 'Username Not Exist'
+            }
             if (response.data == 'wrong password') {
               this.error = 'Password Salah'
             } else {
-              window.localStorage.setItem('token', response.data)
-              this.$router.push({
-                path: `/dashboard`
-              })
-              this.$store.commit('changeheader')
+              localStorage.setItem('token', response.data)
+              this.$router.push('/dashboard')
             }
           })
       },

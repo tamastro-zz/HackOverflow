@@ -8,20 +8,13 @@ vue.use(vuex)
 const store = new vuex.Store({
   state: {
     username: '',
-    id: 0,
+    id: 'j1h23i12g3i12giyg',
     header: false
   },
-  getters: {
-    getusername(state) {
-      if (window.localStorage.getItem('token') !== null) {
-        var decode = jwtdecode(window.localStorage.getItem('token'))
-        return decode
-      }
-    }
-  },
   mutations: {
-    changeheader(state) {
-      state.header = true
+    change(state, payload) {
+      state.id = payload.id,
+      state.username = payload.username
     }
   }
 })

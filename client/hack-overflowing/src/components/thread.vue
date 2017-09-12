@@ -1,65 +1,109 @@
 <template>
   <div class="hello container is-fluid">
-    
-      <article class="media">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img :src="`data:image/png;base64,${identicon(thread.author._id)}`">
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <strong>{{thread.author.username}}</strong>
-              <br> {{thread.text}}
-              <br>
-              <small>
-            <a @click="upquestion"><i class="fa fa-arrow-circle-up"></i></a> · {{votes}}pts ·
-            <a @click="downquestion"><i class="fa fa-arrow-circle-down"></i></a> · {{thread.createdAt}}  -  <a><i class="fa fa-pencil"></i></a></small>
-            </p>
-          </div>
 
-          <article class="media" v-for="ans in thread.answer" :key="ans._id">
-            <figure class="media-left">
-              <p class="image is-48x48">
-                <img :src="`data:image/png;base64,${identicon(ans.user._id)}`">
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>{{ans.user.username}}</strong>
-                  <br> {{ans.text}}
-                  <br>
-                  <small>
+    <section class="hero is-info">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            <b>
+        {{thread.title}}
+        </b>
+          </h1>
+        </div>
+      </div>
+    </section>
+    <br>
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-64x64">
+          <img :src="`data:image/png;base64,${identicon(thread.author._id)}`">
+        </p>
+      </figure>
+      <div class="media-content">
+        <div class="content">
+          <p>
+            <strong>{{thread.author.username}}</strong>
+            <br> {{thread.text}}
+            <br>
+            <small>
+            <a @click="upquestion"><i class="fa fa-arrow-circle-up"></i></a> · {{votes}}pts ·
+            <a @click="downquestion"><i class="fa fa-arrow-circle-down"></i></a> · {{thread.createdAt}}  -  <a v-if="thread.author._id == userid" @click="openmodal"><i class="fa fa-pencil"></i></a></small>            - <a v-if="thread.author._id == userid"><i class="fa fa-trash" @click="deletethread"></i></a></small>
+          </p>
+        </div>
+
+        <article class="media" v-for="ans in thread.answer" :key="ans._id">
+          <figure class="media-left">
+            <p class="image is-48x48">
+              <img :src="`data:image/png;base64,${identicon(ans.user._id)}`">
+            </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>{{ans.user.username}}</strong>
+                <br> {{ans.text}}
+                <br>
+                <small>
             <a @click="upanswer(ans._id)"><i class="fa fa-arrow-circle-up"></i></a> · {{answersvotes(ans.vote.up.length, ans.vote.down.length)}}pts ·
             <a @click="downanswer(ans._id)"><i class="fa fa-arrow-circle-down"></i></a> · {{ans.createdAt}}</small>
-                </p>
-              </div>
+              </p>
             </div>
-          </article>
+          </div>
+        </article>
 
-        </div>
-      </article>
-      <article class="media">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img :src="`data:image/png;base64,${myidenticon}`">
+      </div>
+    </article>
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-64x64">
+          <img :src="`data:image/png;base64,${myidenticon}`">
+        </p>
+      </figure>
+      <div class="media-content">
+        <div class="field">
+          <p class="control">
+            <textarea class="textarea" placeholder="Add a answer..." v-model="answertext"></textarea>
           </p>
-        </figure>
-        <div class="media-content">
-          <div class="field">
-            <p class="control">
-              <textarea class="textarea" placeholder="Add a answer..." v-model="answertext"></textarea>
-            </p>
-          </div>
-          <div class="field">
-            <p class="control">
-              <button class="button" @click="postanswer">Post answer</button>
-            </p>
-          </div>
         </div>
-      </article>
+        <div class="field">
+          <p class="control">
+            <button class="button" @click="postanswer">Post answer</button>
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <div :class='modalclass'>
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Add A Question</p>
+          <button class="delete" aria-label="close" @click="closemodal"></button>
+        </header>
+        <section class="modal-card-body">
+
+          <div class="field">
+            <label class="label">Question Title</label>
+            <div class="control">
+              <input class="input" type="text" :value="thread.title" v-model="title">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Input Your Question</label>
+            <div class="control">
+              <textarea class="textarea" :value="thread.text" v-model="text"></textarea>
+            </div>
+          </div>
+
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="paket">Post</button>
+          <button class="button" @click="closemodal">Cancel</button>
+        </footer>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -70,6 +114,7 @@
     name: 'thread',
     data() {
       return {
+        userid: this.$store.state.id,
         thread: {
           author: {
             _id: '59b2b1300d7d0b335fc3c44a123123213',
@@ -91,7 +136,10 @@
           }],
           createdAt: '2017-09-08T15:03:12.208Z'
         },
-        answertext: ''
+        answertext: '',
+        title: '',
+        text: '',
+        modalclass: 'modal'
       }
     },
     methods: {
@@ -155,7 +203,7 @@
           })
       },
       upanswer(ida) {
-        this.$http.post(`/question/${this.id}/${ida}/up`, {
+        this.$http.patch(`/question/${ida}/up`, {
             text: ''
           }, {
             headers: {
@@ -167,7 +215,7 @@
           })
       },
       downanswer(ida) {
-        this.$http.post(`/question/${this.id}/${ida}/down`, {
+        this.$http.patch(`/question/${ida}/down`, {
             text: ''
           }, {
             headers: {
@@ -177,7 +225,40 @@
           .then(data => {
             this.getthread()
           })
-      }
+      },
+      deletethread() {
+        this.$http.delete(`/question/${this.id}`, {
+            headers: {
+              token: window.localStorage.getItem('token')
+            }
+          })
+          .then(data => {
+            this.$router.push('/dashboard')
+          })
+      },
+      openmodal() {
+        this.modalclass = 'modal is-active'
+      },
+      closemodal() {
+        this.title = ''
+        this.text = ''
+        this.modalclass = 'modal'
+      },
+      editquestion() {
+        this.$http.patch(`/question/${this.id}`, {
+          text: this.text,
+          title: this.title
+        }, {
+          headers: {
+            token: window.localStorage.getItem('token')
+          }
+        })
+      },
+      paket() {
+        this.editquestion(),
+          this.getthread(),
+          this.closemodal()
+      },
     },
     created() {
       this.getthread()
@@ -197,7 +278,7 @@
         }
       },
       myidenticon() {
-        var avatar = new Identicon(this.$store.getters.getusername.id, 420).toString();
+        var avatar = new Identicon(this.$store.state.id, 420).toString();
         return avatar
       },
     }

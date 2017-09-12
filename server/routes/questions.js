@@ -16,9 +16,9 @@ router.post('/:id/up', controller.votequestionup);
 
 router.post('/:id/down', controller.votequestiondown);
 
-router.post('/:id/:ida/down', controller.voteanswerdown);
+router.patch('/:id/down', controller.voteanswerdown);
 
-router.post('/:id/:ida/up', controller.voteanswerup);
+router.patch('/:id/up', controller.voteanswerup);
 
 router.patch('/:id', controller.editquestion);
 

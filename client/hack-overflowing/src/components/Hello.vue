@@ -9,26 +9,26 @@
   </a>
     <br>
     <br>
-    <div  v-for="thread in threads" :key="thread._id">
-    <div class="card">
-      <div class="card-content">
-        <p class="title">
-          “{{thread.title}}”
-        </p>
-        <p class="subtitle">
-          Created By: {{thread.author.username}}
-        </p>
-      </div>
-      <footer class="card-footer">
-        <p class="card-footer-item">
-          <span>
+    <div v-for="thread in threads" :key="thread._id">
+      <div class="card">
+        <div class="card-content">
+          <p class="title">
+            “{{thread.title}}”
+          </p>
+          <p class="subtitle">
+            Created By: {{thread.author.username}}
+          </p>
+        </div>
+        <footer class="card-footer">
+          <p class="card-footer-item">
+            <span>
               Answers: {{thread.answer.length}}
         </span>
-        </p>
-          <button class="button is-white card-footer-item"   @click="openthread(thread._id)">Open Thread</button>
-      </footer>
-    </div>
-    <br>
+          </p>
+          <button class="button is-white card-footer-item" @click="openthread(thread._id)">Open Thread</button>
+        </footer>
+      </div>
+      <br>
     </div>
 
 
@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import jwtdecode from 'jwt-decode'
   export default {
     name: 'hello',
     data() {
@@ -100,31 +101,37 @@
       },
       postquestion() {
         this.$http.post('/question', {
-          title: this.title,
-          text: this.text
-        }, {
-          headers: {
-            token: window.localStorage.getItem('token')
-          }
-        })
-        .then(resposnse=> {
-        })
+            title: this.title,
+            text: this.text
+          }, {
+            headers: {
+              token: window.localStorage.getItem('token')
+            }
+          })
+          .then(resposnse => {})
         this.title = ''
         this.text = ''
         this.closemodal()
       },
       paket() {
         this.postquestion(),
-        this.getthread()
+          this.getthread()
       },
       openthread(id) {
-        this.$router.push({ path: `/thread/${id}` })
-      }
+        this.$router.push({
+          path: `/thread/${id}`
+        })
+      },
+      getusername() {
+          var decode = jwtdecode(window.localStorage.getItem('token'))
+          this.$store.commit('change', decode)
+      },
     },
-    created() {
-      this.getthread()
+      created() {
+        this.getthread()
+        this.getusername()
+      }
     }
-  }
 
 </script>
 
