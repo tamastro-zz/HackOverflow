@@ -10,7 +10,7 @@ import store from './vuex/store'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios.create({
-  baseURL: `http://localhost:3000`
+  baseURL: `https://hack-overflowing.appspot.com/`
 })
 /* eslint-disable no-new */
 new Vue({
