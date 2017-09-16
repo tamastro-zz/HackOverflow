@@ -3,7 +3,7 @@
     <nav class="navbar is-transparent" id="head">
       <div class="navbar-brand">
         <a class="navbar-item">
-        <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+          <h1>HackOverflow</h1>
       </a>
 
         <div class="navbar-burger burger" data-target="navMenuTransparentExample">
